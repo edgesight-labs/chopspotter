@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ChopSpotter — Catalytic Converter Theft Detection</title>
+<meta name="description" content="ChopSpotter detects catalytic converter theft in real time with edge-AI acoustic sensors, sending SMS and email alerts to lots, dealerships, and fleets."/>
+<link rel="canonical" href="https://www.chopspotter.cc/"/>
+<meta name="robots" content="index, follow"/>
+<meta name="theme-color" content="#1A2333"/>
+<link rel="icon" type="image/png" href="assets/chopspotter-logo.png"/>
+
+<!-- Open Graph / social sharing -->
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="ChopSpotter"/>
+<meta property="og:title" content="ChopSpotter — Catalytic Converter Theft Detection"/>
+<meta property="og:description" content="ChopSpotter detects catalytic converter theft in real time with edge-AI acoustic sensors, sending SMS and email alerts to lots, dealerships, and fleets."/>
+<meta property="og:url" content="https://www.chopspotter.cc/"/>
+<meta property="og:image" content="https://www.chopspotter.cc/assets/chopspotter-logo.png"/>
+<meta property="og:image:width" content="502"/>
+<meta property="og:image:height" content="253"/>
+<meta property="og:image:alt" content="ChopSpotter logo"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ChopSpotter — Catalytic Converter Theft Detection"/>
+<meta name="twitter:description" content="ChopSpotter detects catalytic converter theft in real time with edge-AI acoustic sensors, sending SMS and email alerts to lots, dealerships, and fleets."/>
+<meta name="twitter:image" content="https://www.chopspotter.cc/assets/chopspotter-logo.png"/>
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.chopspotter.cc/#organization",
+      "name": "Edgesight Labs",
+      "url": "https://www.chopspotter.cc/",
+      "logo": "https://www.chopspotter.cc/assets/chopspotter-logo.png",
+      "email": "bevan@chopspotter.cc"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.chopspotter.cc/#website",
+      "name": "ChopSpotter",
+      "url": "https://www.chopspotter.cc/",
+      "publisher": { "@id": "https://www.chopspotter.cc/#organization" }
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:      #2F3F5C;
+  --navy-dark: #1A2333;
+  --navy-mid:  #3D5278;
+  --amber:     #C49A35;
+  --amber-lt:  #DDB84A;
+  --white:     #FFFFFF;
+  --off:       #F4F6FA;
+  --text:      #374151;
+  --muted:     #6B7A95;
+  --border:    rgba(47,63,92,0.12);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:#fff;
+  color:var(--text);
+  line-height:1.65;
+}
+
+/* ── NAV ──────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 6vw;height:68px;
+  background:rgba(26,35,51,0.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(196,154,53,0.15);
+}
+
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;
+}
+.nav-logo svg{width:36px;height:36px;}
+.nav-wordmark{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:1.35rem;letter-spacing:.06em;
+  color:#fff;text-transform:uppercase;
+}
+.nav-wordmark span{color:var(--amber);}
+
+.nav-links{
+  display:flex;gap:2.4rem;list-style:none;
+}
+.nav-links a{
+  font-size:.88rem;font-weight:500;letter-spacing:.04em;
+  color:rgba(255,255,255,.72);text-decoration:none;
+  transition:color .2s;
+}
+.nav-links a:hover{color:#fff;}
+
+.nav-cta{
+  background:var(--amber);color:var(--navy-dark);
+  font-size:.85rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:.55rem 1.4rem;border-radius:4px;text-decoration:none;
+  transition:background .2s;
+}
+.nav-cta:hover{background:var(--amber-lt);}
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  background:var(--navy-dark);
+  padding:100px 6vw 80px;
+  position:relative;overflow:hidden;
+}
+
+.hero-eye-bg{
+  position:absolute;right:-4vw;top:50%;transform:translateY(-50%);
+  width:min(55vw,680px);opacity:.06;
+  pointer-events:none;
+}
+
+.hero-content{
+  position:relative;z-index:1;
+  max-width:680px;
+}
+
+.hero-eyebrow{
+  display:inline-block;
+  font-size:.78rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--amber);border:1px solid rgba(196,154,53,.35);
+  padding:.3rem .9rem;border-radius:2px;margin-bottom:1.6rem;
+}
+
+.hero h1{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:clamp(2.8rem,6vw,5rem);
+  line-height:1.02;letter-spacing:.01em;
+  color:#fff;margin-bottom:1.4rem;
+}
+.hero h1 em{color:var(--amber);font-style:normal;}
+
+.hero-sub{
+  font-size:1.08rem;font-weight:300;color:rgba(255,255,255,.72);
+  max-width:500px;margin-bottom:2.4rem;line-height:1.7;
+}
+
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+
+.btn-primary{
+  background:var(--amber);color:var(--navy-dark);
+  font-weight:700;font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;
+  padding:.85rem 2rem;border-radius:4px;text-decoration:none;
+  transition:background .2s,transform .15s;display:inline-block;
+}
+.btn-primary:hover{background:var(--amber-lt);transform:translateY(-1px);}
+
+.btn-ghost{
+  border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.85);
+  font-weight:500;font-size:.9rem;
+  padding:.85rem 2rem;border-radius:4px;text-decoration:none;
+  transition:border-color .2s,color .2s;display:inline-block;
+}
+.btn-ghost:hover{border-color:#fff;color:#fff;}
+
+/* waveform canvas */
+.waveform-wrap{
+  margin:2.8rem 0 0;
+  background:rgba(255,255,255,.04);border:1px solid rgba(196,154,53,.15);
+  border-radius:8px;padding:1rem 1.2rem .6rem;
+}
+.waveform-label{
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:.5rem;
+}
+canvas#wave{display:block;width:100%;height:72px;}
+
+/* ── STATS BAND ───────────────────────────────────────── */
+.stats{
+  background:var(--navy);
+  display:flex;flex-wrap:wrap;gap:0;
+}
+.stat{
+  flex:1 1 220px;padding:2.2rem 3vw;
+  border-right:1px solid rgba(255,255,255,.08);
+  text-align:center;
+}
+.stat:last-child{border-right:none;}
+.stat-num{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:2.6rem;color:var(--amber);
+  display:block;line-height:1;margin-bottom:.4rem;
+}
+.stat-desc{font-size:.82rem;color:rgba(255,255,255,.6);letter-spacing:.04em;}
+
+/* ── SECTIONS ─────────────────────────────────────────── */
+section{padding:6rem 6vw;}
+
+.section-eyebrow{
+  font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:.8rem;
+}
+
+h2.section-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:clamp(1.9rem,3.5vw,2.8rem);
+  color:var(--navy-dark);line-height:1.1;margin-bottom:1.1rem;
+}
+
+.section-intro{
+  font-size:1.05rem;color:var(--muted);max-width:560px;line-height:1.75;
+}
+
+/* ── HOW IT WORKS ─────────────────────────────────────── */
+.how-bg{background:var(--off);}
+
+.steps{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:2px;margin-top:3.5rem;
+}
+
+.step{
+  background:#fff;padding:2.2rem 1.8rem;
+  position:relative;
+}
+.step-num{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:3.5rem;color:var(--amber);
+  line-height:1;margin-bottom:.8rem;opacity:.9;
+}
+.step h3{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:1.25rem;color:var(--navy-dark);
+  letter-spacing:.02em;text-transform:uppercase;margin-bottom:.6rem;
+}
+.step p{font-size:.9rem;color:var(--muted);line-height:1.65;}
+
+.step-connector{
+  position:absolute;top:2.6rem;right:-24px;
+  width:24px;text-align:center;
+  color:var(--amber);font-size:1.4rem;z-index:1;
+}
+
+/* ── FEATURES ─────────────────────────────────────────── */
+.features-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1.5rem;margin-top:3.5rem;
+}
+.feature-card{
+  border:1px solid var(--border);border-radius:8px;
+  padding:2rem 1.8rem;transition:border-color .25s,transform .2s;
+}
+.feature-card:hover{
+  border-color:var(--amber);transform:translateY(-3px);
+}
+.feature-icon{
+  width:44px;height:44px;border-radius:8px;
+  background:rgba(196,154,53,.12);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.1rem;
+}
+.feature-icon svg{width:22px;height:22px;stroke:var(--amber);}
+.feature-card h3{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:1.15rem;letter-spacing:.03em;text-transform:uppercase;
+  color:var(--navy-dark);margin-bottom:.5rem;
+}
+.feature-card p{font-size:.88rem;color:var(--muted);line-height:1.65;}
+
+/* ── TECH SECTION ─────────────────────────────────────── */
+.tech-bg{background:var(--navy-dark);color:#fff;}
+.tech-bg .section-title{color:#fff;}
+.tech-bg .section-intro{color:rgba(255,255,255,.62);}
+
+.tech-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:1px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:8px;overflow:hidden;
+  margin-top:3.5rem;
+}
+.tech-item{
+  background:var(--navy-dark);padding:1.8rem;
+}
+.tech-label{
+  font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:.4rem;
+}
+.tech-value{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:1.05rem;color:#fff;letter-spacing:.02em;
+}
+.tech-note{font-size:.8rem;color:rgba(255,255,255,.45);margin-top:.25rem;}
+
+/* ── CONTACT ──────────────────────────────────────────── */
+.contact-bg{background:var(--off);}
+
+.contact-card{
+  max-width:640px;background:#fff;
+  border:1px solid var(--border);border-radius:12px;
+  padding:3rem;margin-top:3rem;
+}
+.contact-card h3{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:1.4rem;letter-spacing:.03em;text-transform:uppercase;
+  color:var(--navy-dark);margin-bottom:1.5rem;
+}
+.contact-row{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:1rem 0;border-bottom:1px solid var(--border);
+}
+.contact-row:last-child{border-bottom:none;padding-bottom:0;}
+.contact-icon{
+  width:40px;height:40px;border-radius:6px;
+  background:rgba(196,154,53,.1);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:.15rem;
+}
+.contact-icon svg{width:18px;height:18px;stroke:var(--amber);}
+.contact-row-label{
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:.25rem;
+}
+.contact-row-value{
+  font-size:.97rem;color:var(--navy-dark);font-weight:500;
+}
+.contact-row-value a{
+  color:var(--navy);text-decoration:none;
+  border-bottom:1px solid rgba(47,63,92,.2);
+  transition:color .2s,border-color .2s;
+}
+.contact-row-value a:hover{color:var(--amber);border-color:var(--amber);}
+
+/* ── FOOTER ───────────────────────────────────────────── */
+footer{
+  background:var(--navy-dark);
+  padding:3rem 6vw;
+  display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:1.5rem;
+}
+.footer-brand{display:flex;align-items:center;gap:10px;}
+.footer-wordmark{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:1.1rem;letter-spacing:.06em;
+  color:#fff;text-transform:uppercase;
+}
+.footer-wordmark span{color:var(--amber);}
+.footer-copy{
+  font-size:.8rem;color:rgba(255,255,255,.38);letter-spacing:.04em;
+}
+.footer-links{
+  display:flex;gap:2rem;list-style:none;
+}
+.footer-links a{
+  font-size:.8rem;color:rgba(255,255,255,.45);text-decoration:none;
+}
+.footer-links a:hover{color:rgba(255,255,255,.85);}
+.tm{font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.3rem;}
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media(max-width:700px){
+  .nav-links{display:none;}
+  .step-connector{display:none;}
+  .stats{flex-direction:column;}
+  .stat{border-right:none;border-bottom:1px solid rgba(255,255,255,.08);}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="assets/chopspotter-logo.png" alt="ChopSpotter logo" style="height:44px;width:auto;filter:brightness(0) invert(1);"/>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in Touch</a>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────── -->
+<section class="hero">
+
+  <!-- background logo -->
+  <img src="assets/chopspotter-logo.png" alt=""
+    class="hero-eye-bg"
+    style="filter:brightness(0) invert(1);"
+    aria-hidden="true"/>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">Acoustic AI &nbsp;·&nbsp; Edge Computing &nbsp;·&nbsp; Real-Time Detection</span>
+    <h1>Hear the chop<br/><em>before it happens.</em></h1>
+    <p class="hero-sub">
+      ChopSpotter uses an AI-powered acoustic sensor array to detect catalytic converter theft
+      in real time — alerting you by SMS and email the moment a cutting event begins, not after
+      the converter is gone.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Request a Demo</a>
+      <a href="#how-it-works" class="btn-ghost">See How It Works</a>
+    </div>
+
+    <div class="waveform-wrap">
+      <div class="waveform-label">Live acoustic signal — reciprocating saw detected</div>
+      <canvas id="wave" width="600" height="72"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS BAND ─────────────────────────────────── -->
+<div class="stats">
+  <div class="stat">
+    <span class="stat-num">60s</span>
+    <span class="stat-desc">Average theft event duration</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">7</span>
+    <span class="stat-desc">Tool classes identified by acoustic AI</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">&lt;5s</span>
+    <span class="stat-desc">Alert delivery from detection</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">24/7</span>
+    <span class="stat-desc">Continuous edge monitoring</span>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ───────────────────────────────── -->
+<section class="how-bg" id="how-it-works">
+  <div class="section-eyebrow">Detection Pipeline</div>
+  <h2 class="section-title">From sound wave<br/>to SMS in seconds</h2>
+  <p class="section-intro">
+    A five-microphone array listens continuously for the acoustic signature of a cutting
+    tool engaged with a metal exhaust pipe. No cameras. No line of sight required.
+  </p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Capture</h3>
+      <p>A five-element microphone array captures ambient audio from the monitored vehicle
+      area at 22,050 Hz, with beamforming focused toward the protected zone.</p>
+      <div class="step-connector">›</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Separate</h3>
+      <p>Proprietary triple-pass harmonic separation isolates the sustained blade-vibration
+      harmonics of cutting tools from background environmental noise.</p>
+      <div class="step-connector">›</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Classify</h3>
+      <p>An on-device Spectral-Classification network processes the acoustic signal in real
+      time, identifying angle grinders, reciprocating saws, pipe cutters, and hacksaws.</p>
+      <div class="step-connector">›</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>Alert</h3>
+      <p>A Bayesian evidence accumulator suppresses false positives before dispatching an
+      SMS, email, and cloud event record the moment a genuine theft event is confirmed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ───────────────────────────────────── -->
+<section id="features">
+  <div class="section-eyebrow">Capabilities</div>
+  <h2 class="section-title">Built for lots,<br/>dealerships, and fleets</h2>
+  <p class="section-intro">
+    ChopSpotter is engineered for real-world commercial deployments — not laboratory
+    conditions. It works where cameras can't see and alarms don't reach.
+  </p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/>
+        </svg>
+      </div>
+      <h3>Real-Time Detection</h3>
+      <p>Continuous acoustic monitoring with on-device AI inference. No cloud round-trip
+      required for detection — alerts dispatch within seconds of event confirmation.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/>
+        </svg>
+      </div>
+      <h3>No Line of Sight</h3>
+      <p>Sound travels through and around vehicles. ChopSpotter monitors an entire parking
+      area from a single mounting point — including vehicles obscured from camera views.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.8 19.8 0 0 1 1.61 3.48 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.54a16 16 0 0 0 6.29 6.29l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      </div>
+      <h3>Instant SMS and Email Alerts</h3>
+      <p>Alerts reach your phone and inbox before the thief has finished cutting. Include
+      the time, location, and event classification in every notification.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h3>Low False-Positive Rate</h3>
+      <p>A Bayesian evidence accumulator requires sustained classification confidence across
+      multiple analysis windows before dispatching an alert — ignoring car doors, thunder,
+      and passing aircraft.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>
+        </svg>
+      </div>
+      <h3>Cellular Failover</h3>
+      <p>WiFi is the primary alert path. A built-in cellular backup ensures alerts reach you
+      even if the local network is disrupted — including by the thieves themselves.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+        </svg>
+      </div>
+      <h3>Battery or Hardwired</h3>
+      <p>Operates from a hardwired DC supply or a rechargeable LiPo battery, enabling
+      deployment at any location in a parking area without dedicated power infrastructure.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── TECHNOLOGY ─────────────────────────────────── -->
+<section class="tech-bg" id="technology">
+  <div class="section-eyebrow" style="color:var(--amber);">Under the hood</div>
+  <h2 class="section-title">Edge AI, no cloud dependency</h2>
+  <p class="section-intro">
+    All signal processing and classification runs locally on the device. ChopSpotter
+    does not depend on a cloud server to make a detection decision — only to deliver the alert.
+  </p>
+
+  <div class="tech-grid">
+    <div class="tech-item">
+      <div class="tech-label">Compute</div>
+      <div class="tech-value">Edge AI processor</div>
+      <div class="tech-note">On-device inference, no cloud dependency</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Sensor</div>
+      <div class="tech-value">Multi-element microphone array</div>
+      <div class="tech-note">Wide-area directional audio capture</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Detection</div>
+      <div class="tech-value">Acoustic AI classifier</div>
+      <div class="tech-note">Trained on real-world cutting event recordings</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Connectivity</div>
+      <div class="tech-value">WiFi + cellular failover</div>
+      <div class="tech-note">Dual-path alert delivery, 24/7</div>
+    </div>
+  </div>
+
+  <p style="margin-top:2.5rem;font-size:.82rem;color:rgba(255,255,255,.35);letter-spacing:.04em;">
+    Patent pending — Edgesight Labs LLC &nbsp;·&nbsp; Technology protected under U.S. patent application.
+  </p>
+</section>
+
+<!-- ── CONTACT ────────────────────────────────────── -->
+<section class="contact-bg" id="contact">
+  <div class="section-eyebrow">Get in Touch</div>
+  <h2 class="section-title">Ready to protect<br/>your vehicles?</h2>
+  <p class="section-intro">
+    We work directly with dealerships, fleet operators, and parking facility managers.
+    Reach out to discuss a deployment, request a demo, or ask a technical question.
+  </p>
+
+  <div class="contact-card">
+    <h3>Contact Edgesight Labs</h3>
+
+    <div class="contact-row">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-row-label">Email — ChopSpotter</div>
+        <div class="contact-row-value">
+          <a href="mailto:bevan@chopspotter.cc">bevan@chopspotter.cc</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-row">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-row-label">Email &#8212; Edgesight Labs</div>
+        <div class="contact-row-value">
+          <a href="mailto:bevan@edgesight.ai">bevan@edgesight.ai</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-row">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 8v4l3 3"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-row-label">Response Time</div>
+        <div class="contact-row-value">Within one business day</div>
+      </div>
+    </div>
+
+    <div class="contact-row">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-row-label">Company</div>
+        <div class="contact-row-value">Edgesight Labs LLC</div>
+      </div>
+    </div>
+
+    <div class="contact-row">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-row-label">Website</div>
+        <div class="contact-row-value">
+          <a href="https://www.chopspotter.cc/">www.chopspotter.cc</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div>
+    <div class="footer-brand">
+      <img src="assets/chopspotter-logo.png" alt="ChopSpotter"
+        style="height:36px;width:auto;filter:brightness(0) invert(1);margin-right:10px;"/>
+    </div>
+    <div class="tm">Patent pending &nbsp;·&nbsp; Trademark pending &nbsp;·&nbsp; &copy; 2026 Edgesight Labs LLC</div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">Acoustic AI for vehicle fleet security</div>
+</footer>
+
+<!-- ── WAVEFORM ANIMATION ─────────────────────────── -->
+<script>
+(function(){
+  const canvas = document.getElementById('wave');
+  const ctx    = canvas.getContext('2d');
+  let   t      = 0;
+
+  function draw(){
+    const W = canvas.offsetWidth, H = canvas.offsetHeight;
+    canvas.width  = W * window.devicePixelRatio;
+    canvas.height = H * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+    ctx.clearRect(0,0,W,H);
+
+    // Clean harmonic (amber, sustained) — represents detected tool fundamental
+    ctx.beginPath();
+    ctx.strokeStyle = '#C49A35';
+    ctx.lineWidth   = 1.8;
+    ctx.globalAlpha = 0.9;
+    for(let x=0;x<W;x++){
+      const f = t * 0.04;
+      const y = H/2
+        + Math.sin((x/W)*Math.PI*14 + f) * H*0.28
+        + Math.sin((x/W)*Math.PI*28 + f*1.5) * H*0.10
+        + Math.sin((x/W)*Math.PI*42 + f*2)   * H*0.05;
+      x === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // Noise overlay (dim white) — ambient background
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.lineWidth   = 1;
+    for(let x=0;x<W;x++){
+      const noise = (Math.random()-0.5) * H * 0.12;
+      const y = H/2 + noise;
+      x === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // Detection pulse dot (amber, blinking at blade-tooth rate)
+    const pulse = Math.abs(Math.sin(t * 0.06));
+    ctx.beginPath();
+    ctx.arc(W-14, H/2, 4 + pulse*2, 0, Math.PI*2);
+    ctx.fillStyle = '#C49A35';
+    ctx.globalAlpha = 0.5 + pulse*0.5;
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+</body>
+</html>
